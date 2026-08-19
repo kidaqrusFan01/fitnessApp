@@ -15,7 +15,7 @@
 <header>
   <div class="wrap">
     <a href="{% url 'core:home' %}" class="logo">PRIME<span>ATHLETES</span></a>
-    <nav class="primary-nav">
+    <nav class="primary-nav" id="primaryNav">
       <a href="{% url 'products:catalog' %}?audience=men">Men</a>
       <a href="{% url 'products:catalog' %}?audience=women">Women</a>
       <a href="{% url 'products:catalog' %}?category=fitness-watches">Watches</a>
@@ -35,8 +35,25 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
         {% if cart_item_count %}<span class="cart-badge">{{ cart_item_count }}</span>{% endif %}
       </a>
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
     </div>
   </div>
+
+  <nav class="mobile-nav" id="mobileNav">
+    <a href="{% url 'products:catalog' %}?audience=men">Men</a>
+    <a href="{% url 'products:catalog' %}?audience=women">Women</a>
+    <a href="{% url 'products:catalog' %}?category=fitness-watches">Watches</a>
+    <a href="{% url 'events:list' %}">Events</a>
+    <a href="{% url 'cart:detail' %}">Cart{% if cart_item_count %} ({{ cart_item_count }}){% endif %}</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'accounts:profile' %}">Account</a>
+    {% else %}
+      <a href="{% url 'accounts:login' %}">Log in</a>
+      <a href="{% url 'accounts:signup' %}">Sign up</a>
+    {% endif %}
+  </nav>
 </header>
 
 {% if messages %}
@@ -82,6 +99,27 @@
     </div>
   </div>
 </footer>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  if (menuToggle && mobileNav) {
+    menuToggle.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', isOpen);
+      menuToggle.classList.toggle('is-active', isOpen);
+      document.body.classList.toggle('nav-open', isOpen);
+    });
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.classList.remove('is-active');
+        document.body.classList.remove('nav-open');
+      });
+    });
+  }
+</script>
 
 </body>
 </html>

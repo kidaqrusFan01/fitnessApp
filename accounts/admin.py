@@ -3,6 +3,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 from .models import User
 
+admin.site.site_header = 'Prime Athletes Admin'
+admin.site.site_title = 'Prime Athletes Admin'
+admin.site.index_title = 'Ecosystem management'
+
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):

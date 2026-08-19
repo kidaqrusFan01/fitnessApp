@@ -1,0 +1,75 @@
+/* Prime Athletes — admin theme override.
+   Django's admin exposes its palette as CSS custom properties on :root,
+   so we only need to redefine those, not fight the built-in stylesheet. */
+
+:root, html[data-theme="light"], html[data-theme="dark"] {
+  --primary: #E31E24;
+  --secondary: #17171A;
+  --accent: #E31E24;
+  --primary-fg: #F5F3EF;
+
+  --header-color: #F5F3EF;
+  --header-branding-color: #F5F3EF;
+  --header-bg: #0A0A0B;
+  --header-link-color: #F5F3EF;
+
+  --breadcrumbs-fg: #B8B8BC;
+  --breadcrumbs-link-fg: #F5F3EF;
+  --breadcrumbs-bg: #17171A;
+
+  --link-fg: #E31E24;
+  --link-hover-color: #8C0F16;
+  --link-selected-fg: #8C0F16;
+
+  --button-bg: #E31E24;
+  --button-hover-bg: #8C0F16;
+  --default-button-bg: #17171A;
+  --default-button-hover-bg: #0A0A0B;
+  --delete-button-bg: #8C0F16;
+  --delete-button-hover-bg: #6b0b10;
+
+  --selected-bg: #f5e6e6;
+  --selected-row: #fff4f4;
+}
+
+#header {
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+#site-name a {
+  font-family: 'Anton', 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 22px;
+}
+#site-name .brand-accent { color: #E31E24; }
+#site-name .brand-sub {
+  font-family: 'Inter', sans-serif;
+  text-transform: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #B8B8BC;
+  letter-spacing: 0;
+  margin-left: 6px;
+}
+
+div.breadcrumbs {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.module h2, .module caption, .inline-group h2 {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+  border-radius: 2px;
+}
+
+.object-tools a.addlink {
+  background-color: #E31E24;
+}
+.object-tools a.addlink:hover {
+  background-color: #8C0F16;
+}

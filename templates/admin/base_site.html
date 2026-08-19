@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Prime Athletes Admin{% endblock %}
+
+{% block branding %}
+<div id="site-name"><a href="{% url 'admin:index' %}">Prime<span class="brand-accent">Athletes</span> <span class="brand-sub">Admin</span></a></div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin-theme.css' %}">
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
