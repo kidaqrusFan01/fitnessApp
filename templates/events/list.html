@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Events — Prime Athletes{% endblock %}
+
+{% block content %}
+<div class="page-header wrap">
+  <span class="eyebrow">Community</span>
+  <h1 class="display">Train together.</h1>
+</div>
+
+<div class="wrap section-tight">
+  <div class="event-list">
+    {% for event in events %}
+    <div class="event-row">
+      <div class="event-date"><span class="day">{{ event.start_datetime|date:"d" }}</span>{{ event.start_datetime|date:"M"|upper }}</div>
+      <div class="event-info">
+        <h4>{{ event.title }}</h4>
+        <p>{{ event.location }} &middot; {{ event.start_datetime|date:"g:i A" }}</p>
+      </div>
+      <div class="event-spots"><strong>{{ event.spots_left }}</strong>spots left</div>
+      <a href="{{ event.get_absolute_url }}" class="btn btn-ghost">Details</a>
+    </div>
+    {% empty %}
+    <p style="color:var(--steel);padding:40px 0;">No events scheduled right now — check back soon.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

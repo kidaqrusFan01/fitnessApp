@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Your profile — Prime Athletes{% endblock %}
+
+{% block content %}
+<div class="page-header wrap">
+  <span class="eyebrow">Account</span>
+  <h1 class="display">Hey, {{ member.username }}.</h1>
+</div>
+
+<div class="wrap section-tight">
+  <div class="eco-grid" style="margin-top:0;">
+    <div class="eco-item">
+      <span class="num mono">Email</span>
+      <h4>{{ member.email }}</h4>
+    </div>
+    <div class="eco-item">
+      <span class="num mono">Shop preference</span>
+      <h4>{{ member.get_shop_preference_display }}</h4>
+    </div>
+    <div class="eco-item">
+      <span class="num mono">Saved size</span>
+      <h4>{{ member.saved_size|default:"Not set" }}</h4>
+    </div>
+  </div>
+
+  <form method="post" action="{% url 'accounts:logout' %}" style="margin-top:40px;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-ghost">Log out</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Prime Athletes{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="{% url 'core:home' %}" class="logo">PRIME<span>ATHLETES</span></a>
+    <nav class="primary-nav">
+      <a href="{% url 'products:catalog' %}?audience=men">Men</a>
+      <a href="{% url 'products:catalog' %}?audience=women">Women</a>
+      <a href="{% url 'products:catalog' %}?category=fitness-watches">Watches</a>
+      <a href="{% url 'events:list' %}">Events</a>
+    </nav>
+    <div class="nav-actions">
+      {% if user.is_authenticated %}
+        <a href="{% url 'accounts:profile' %}" class="icon-btn" aria-label="Account">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </a>
+      {% else %}
+        <a href="{% url 'accounts:login' %}" class="icon-btn" aria-label="Log in">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </a>
+      {% endif %}
+      <a href="{% url 'cart:detail' %}" class="icon-btn" aria-label="Cart, {{ cart_item_count }} items">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+        {% if cart_item_count %}<span class="cart-badge">{{ cart_item_count }}</span>{% endif %}
+      </a>
+    </div>
+  </div>
+</header>
+
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="{% url 'core:home' %}" class="logo">PRIME<span>ATHLETES</span></a>
+        <p>Gear, tech, and community for men and women who train with intent.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Shop</h5>
+        <a href="{% url 'products:catalog' %}?audience=men">Men's Gear</a>
+        <a href="{% url 'products:catalog' %}?audience=women">Women's Gear</a>
+        <a href="{% url 'products:catalog' %}">Fitness Watches</a>
+      </div>
+      <div class="footer-col">
+        <h5>Community</h5>
+        <a href="{% url 'events:list' %}">Events</a>
+        <a href="{% url 'accounts:signup' %}">Membership</a>
+      </div>
+      <div class="footer-col">
+        <h5>Support</h5>
+        <a href="#">Sizing Guide</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; {% now "Y" %} Prime Athletes. All rights reserved.</span>
+      <span>Built for every athlete.</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

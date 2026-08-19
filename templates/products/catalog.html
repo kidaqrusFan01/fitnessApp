@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Shop — Prime Athletes{% endblock %}
+
+{% block content %}
+<div class="page-header wrap">
+  <span class="eyebrow">Catalog</span>
+  <h1 class="display">Gear &amp; tech.</h1>
+</div>
+
+<div class="wrap section-tight">
+  <div class="filter-row">
+    <a href="{% url 'products:catalog' %}" class="filter-pill {% if not active_audience and not active_category %}active{% endif %}">All</a>
+    <a href="{% url 'products:catalog' %}?audience=men" class="filter-pill {% if active_audience == 'men' %}active{% endif %}">Men</a>
+    <a href="{% url 'products:catalog' %}?audience=women" class="filter-pill {% if active_audience == 'women' %}active{% endif %}">Women</a>
+    {% for category in categories %}
+    <a href="{% url 'products:catalog' %}?category={{ category.slug }}" class="filter-pill {% if active_category == category.slug %}active{% endif %}">{{ category.name }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="product-grid">
+    {% for product in products %}
+    <a href="{{ product.get_absolute_url }}" class="product-card">
+      <div class="product-media">
+        {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% endif %}
+        {% if product.is_featured %}<span class="product-tag">Featured</span>{% endif %}
+      </div>
+      <div class="product-body">
+        <div class="kicker">{{ product.category.name }}</div>
+        <h4>{{ product.name }}</h4>
+        <div class="product-price">
+          <span class="price">${{ product.base_price }}</span>
+        </div>
+        {% if product.in_stock %}
+          <div class="stock-note">In stock</div>
+        {% else %}
+          <div class="stock-note out">Out of stock</div>
+        {% endif %}
+      </div>
+    </a>
+    {% empty %}
+    <p style="color:var(--steel);">No products match this filter yet.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

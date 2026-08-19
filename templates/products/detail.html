@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — Prime Athletes{% endblock %}
+
+{% block content %}
+<div class="wrap section-tight">
+  <div class="product-detail">
+    <div class="product-media">
+      {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% endif %}
+    </div>
+    <div>
+      <div class="kicker">{{ product.category.name }}</div>
+      <h1 class="display" style="font-size:clamp(30px,4vw,44px);margin-top:8px;">{{ product.name }}</h1>
+      <div class="detail-price mono">${{ product.base_price }}</div>
+      <p style="color:var(--steel);max-width:460px;">{{ product.description }}</p>
+
+      <form method="post" action="{% url 'cart:add' 0 %}" id="add-to-cart-form">
+        {% csrf_token %}
+        <div class="size-row">
+          {% for variant in product.variants.all %}
+          <button type="button"
+                  class="size-pill {% if not variant.stock_quantity %}disabled{% endif %}"
+                  data-variant-id="{{ variant.id }}"
+                  {% if not variant.stock_quantity %}disabled{% endif %}
+                  onclick="selectVariant(this, {{ variant.id }})">
+            {{ variant.get_size_display }}{% if variant.color %} / {{ variant.color }}{% endif %}
+          </button>
+          {% endfor %}
+        </div>
+        <input type="hidden" name="variant_id" id="selected-variant-id" value="">
+        <button type="submit" class="btn btn-primary" id="add-to-cart-btn" disabled>Add to cart</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function selectVariant(el, variantId) {
+  document.querySelectorAll('.size-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('selected-variant-id').value = variantId;
+  const btn = document.getElementById('add-to-cart-btn');
+  btn.disabled = false;
+  document.getElementById('add-to-cart-form').action = '/cart/add/' + variantId + '/';
+}
+</script>
+{% endblock %}

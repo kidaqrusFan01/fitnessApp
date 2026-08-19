@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Your cart — Prime Athletes{% endblock %}
+
+{% block content %}
+<div class="page-header wrap">
+  <span class="eyebrow">Cart</span>
+  <h1 class="display">Your bag.</h1>
+</div>
+
+<div class="wrap section-tight">
+  {% if cart %}
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:48px;align-items:start;">
+    <table class="cart-table">
+      <thead>
+        <tr><th>Item</th><th>Qty</th><th>Total</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for item in cart %}
+        <tr>
+          <td>
+            <div class="cart-line-item">
+              <div class="cart-thumb"></div>
+              <div>
+                <div>{{ item.variant.product.name }}</div>
+                <div style="color:var(--steel);font-size:12px;">{{ item.variant.get_size_display }}{% if item.variant.color %} / {{ item.variant.color }}{% endif %}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <form method="post" action="{% url 'cart:update' item.variant.id %}" style="display:flex;gap:8px;">
+              {% csrf_token %}
+              <input class="qty-input" type="number" name="quantity" min="1" value="{{ item.quantity }}">
+              <button type="submit" class="btn btn-ghost btn-small">Update</button>
+            </form>
+          </td>
+          <td class="mono">${{ item.line_total }}</td>
+          <td>
+            <form method="post" action="{% url 'cart:remove' item.variant.id %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-ghost btn-small">Remove</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="cart-summary">
+      <div class="row"><span>Subtotal</span><span class="mono">${{ cart.total_price }}</span></div>
+      <div class="row"><span>Shipping</span><span class="mono">Calculated at checkout</span></div>
+      <div class="row total"><span>Total</span><span>${{ cart.total_price }}</span></div>
+      <a href="#" class="btn btn-primary" style="width:100%;margin-top:20px;">Checkout</a>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <p class="eyebrow">Your cart is empty</p>
+    <h2 class="display" style="font-size:32px;margin:16px 0 30px;">Nothing in the bag yet.</h2>
+    <a href="{% url 'products:catalog' %}" class="btn btn-primary">Shop the catalog</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

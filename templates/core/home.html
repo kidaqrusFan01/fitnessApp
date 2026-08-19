@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="hero" style="padding: 80px 0 100px;">
+  <div class="wrap">
+    <div class="hero-tag" style="display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;">
+      <span class="eyebrow">Now shipping fitness watches nationwide</span>
+    </div>
+    <h1 class="display" style="font-size:clamp(40px, 8vw, 100px); max-width:950px;">
+      One ecosystem.<br>Every <span style="color:var(--red);">athlete.</span>
+    </h1>
+    <p style="margin-top:28px;max-width:520px;font-size:18px;color:var(--steel);">
+      Gear, tech, and events built around how you actually train — for men and women who don't stop at the gym door.
+    </p>
+    <div style="margin-top:44px;display:flex;gap:16px;flex-wrap:wrap;">
+      <a href="{% url 'products:catalog' %}" class="btn btn-primary">Shop the drop</a>
+      <a href="{% url 'events:list' %}" class="btn btn-ghost">Find an event</a>
+    </div>
+  </div>
+</section>
+
+<div class="pulse-divider">
+  <svg viewBox="0 0 1400 48" preserveAspectRatio="none">
+    <polyline points="0,24 100,24 130,6 160,42 190,24 1400,24" fill="none" stroke="#E31E24" stroke-width="1.5"/>
+    <polyline points="1400,24 1500,24 1530,6 1560,42 1590,24 2800,24" fill="none" stroke="#E31E24" stroke-width="1.5"/>
+  </svg>
+</div>
+
+<section class="categories">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Shop by category</span>
+        <h2 class="display">Built for how<br>you move.</h2>
+      </div>
+      <p>Four categories, one connected account — your sizes, your watch data, your event bookings, all in sync.</p>
+    </div>
+    <div class="cat-grid">
+      {% for category in categories %}
+      <div class="cat-card">
+        <span class="cat-label">{{ category.get_audience_display }}</span>
+        <h3 class="display">{{ category.name }}</h3>
+        <a href="{% url 'products:catalog' %}?category={{ category.slug }}" class="arrow">Shop now <span>&rarr;</span></a>
+      </div>
+      {% empty %}
+      <p style="color:var(--steel);padding:20px;">Categories will appear here once added in the admin.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Featured</span>
+        <h2 class="display">This week's picks.</h2>
+      </div>
+      <p>Restocked staples and new arrivals across men's, women's, and tech.</p>
+    </div>
+    <div class="product-grid">
+      {% for product in featured_products %}
+      <a href="{{ product.get_absolute_url }}" class="product-card">
+        <div class="product-media">
+          {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% endif %}
+          <span class="product-tag">{{ product.get_kind_display }}</span>
+        </div>
+        <div class="product-body">
+          <div class="kicker">{{ product.category.name }}</div>
+          <h4>{{ product.name }}</h4>
+          <div class="product-price">
+            <span class="price">${{ product.base_price }}</span>
+          </div>
+        </div>
+      </a>
+      {% empty %}
+      <p style="color:var(--steel);">No featured products yet — mark a product as "featured" in the admin.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="events">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Upcoming</span>
+        <h2 class="display">Train together.</h2>
+      </div>
+      <p>Local meetups, competitions, and coached sessions hosted by Prime Athletes.</p>
+    </div>
+    <div class="event-list">
+      {% for event in upcoming_events %}
+      <div class="event-row">
+        <div class="event-date"><span class="day">{{ event.start_datetime|date:"d" }}</span>{{ event.start_datetime|date:"M"|upper }}</div>
+        <div class="event-info">
+          <h4>{{ event.title }}</h4>
+          <p>{{ event.location }} &middot; {{ event.start_datetime|date:"g:i A" }}</p>
+        </div>
+        <div class="event-spots"><strong>{{ event.spots_left }}</strong>spots left</div>
+        <a href="{{ event.get_absolute_url }}" class="btn btn-ghost">Details</a>
+      </div>
+      {% empty %}
+      <p style="color:var(--steel);">No events scheduled yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section style="text-align:center;">
+  <div class="wrap">
+    <span class="eyebrow">The ecosystem</span>
+    <h2 class="display" style="margin-top:14px;font-size:clamp(32px, 5vw, 56px);">Your gear, your watch,<br>and your gym calendar — synced.</h2>
+    <p style="max-width:560px;margin:24px auto 0;color:var(--steel);font-size:16px;">
+      One Prime Athletes account connects everything: what you wear, what you track, and where you train next.
+    </p>
+    <div class="eco-grid">
+      <div class="eco-item">
+        <span class="num mono">A</span>
+        <h4>Fit that follows you</h4>
+        <p>Save your sizes once. Every size range, men's and women's, checks out in one tap from then on.</p>
+      </div>
+      <div class="eco-item">
+        <span class="num mono">B</span>
+        <h4>Watch data that matters</h4>
+        <p>Pair a Prime watch and your heart rate, pace, and recovery show up right on your account dashboard.</p>
+      </div>
+      <div class="eco-item">
+        <span class="num mono">C</span>
+        <h4>Events without the friction</h4>
+        <p>Reserve a spot, get reminders, and see your training history — competitions included — in one place.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter">
+  <div class="wrap">
+    <h3 class="display">Get early access to drops and events.</h3>
+    <form class="newsletter-form" method="post" action="#">
+      {% csrf_token %}
+      <label for="email-input" style="position:absolute;left:-9999px;">Email address</label>
+      <input id="email-input" type="email" name="email" placeholder="you@email.com" required>
+      <button type="submit">Sign up</button>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

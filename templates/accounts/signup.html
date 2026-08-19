@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Join — Prime Athletes{% endblock %}
+
+{% block content %}
+<div class="auth-shell wrap">
+  <span class="eyebrow">Join the ecosystem</span>
+  <h1 class="display" style="font-size:36px;margin-top:8px;">Create your account.</h1>
+  <p class="sub">One account for gear, watches, and events.</p>
+
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-field">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<div class="helptext">{{ field.help_text }}</div>{% endif %}
+      {% if field.errors %}<ul class="errorlist">{% for error in field.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary" style="width:100%;">Create account</button>
+  </form>
+
+  <p class="auth-switch">Already a member? <a href="{% url 'accounts:login' %}">Log in</a></p>
+</div>
+{% endblock %}

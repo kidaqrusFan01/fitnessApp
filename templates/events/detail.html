@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }} — Prime Athletes{% endblock %}
+
+{% block content %}
+<div class="event-hero wrap">
+  <span class="eyebrow">{{ event.start_datetime|date:"l, F j" }}</span>
+  <h1 class="display" style="font-size:clamp(32px,5vw,56px);margin-top:10px;">{{ event.title }}</h1>
+  <div class="meta">
+    <div><strong>{{ event.start_datetime|date:"g:i A" }}</strong>Start time</div>
+    <div><strong>{{ event.location }}</strong>Location</div>
+    <div><strong>{{ event.spots_left }}</strong>Spots left</div>
+    <div><strong>{% if event.price %}${{ event.price }}{% else %}Free{% endif %}</strong>Price</div>
+  </div>
+</div>
+
+<div class="wrap section-tight">
+  <p style="max-width:600px;color:var(--steel);margin-bottom:40px;">{{ event.description }}</p>
+
+  {% if already_registered %}
+    <p class="eyebrow">You're registered for this event.</p>
+  {% elif user.is_authenticated %}
+    <form method="post" action="{% url 'events:register' event.slug %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary" {% if event.spots_left <= 0 %}{% endif %}>
+        {% if event.spots_left > 0 %}Reserve your spot{% else %}Join waitlist{% endif %}
+      </button>
+    </form>
+  {% else %}
+    <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-primary">Log in to reserve a spot</a>
+  {% endif %}
+</div>
+{% endblock %}
